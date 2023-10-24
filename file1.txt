@@ -1,0 +1,6 @@
+
+You forgot to allocate a buffer space before reading your data : LPVOID data = NULL;
+
+Before reading you must allocate a fileSize buffer space : data = malloc(fileSize);
+
+And probably must also declare your data variable as char* instead of void
