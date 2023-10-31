@@ -12,8 +12,8 @@
 #define UNICODE
 #endif 
 
-#define COLS 2
-#define ROWS 3
+#define COLS 3
+#define ROWS 4
 
 using namespace std;
 
@@ -48,9 +48,8 @@ VOID OnPaint(HWND hWnd, LONG clientWidth, LONG clientHeight)
 
             if (stringIndex < strings.size()) {
                 wstring text = strings.at(stringIndex);
-                text.erase(remove_if(text.begin(), text.end(), iswspace), text.end()); // Удаляем пробелы
+                text.erase(remove_if(text.begin(), text.end(), iswspace), text.end()); 
                 int currRowHeight = DrawTextEx(hdc, const_cast<wchar_t*>(text.c_str()), -1, &cellRect, DT_WORDBREAK | DT_TOP | DT_EDITCONTROL, NULL);
-
 
 
                 if (currRowHeight > maxRowHeight) {
@@ -73,14 +72,19 @@ VOID OnPaint(HWND hWnd, LONG clientWidth, LONG clientHeight)
         topRowY += maxRowHeight + padding + padding;
     }
 
+ 
     MoveToEx(hdc, 0, 0, NULL);
     LineTo(hdc, clientWidth, 0);
+
+
+    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
     for (int col = 1; col < COLS; col++)
     {
         MoveToEx(hdc, col * colWidth, 0, NULL);
-        LineTo(hdc, col * colWidth, clientHeight);
+        LineTo(hdc, col * colWidth, screenHeight);
     }
+
 
     for (int row = 0; row < ROWS; row++)
     {
@@ -97,7 +101,7 @@ std::wstring LoadTextFromFile(const std::wstring& filename) {
     if (file.is_open()) {
         std::wstring line;
         while (std::getline(file, line)) {
-            // Удаляем пробелы из строки
+            
             line.erase(std::remove_if(line.begin(), line.end(), iswspace), line.end());
             text += line;
         }
@@ -111,8 +115,23 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
 {
+
     strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt"));
     strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt"));
+
+    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt"));
+    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt"));
+
+    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt"));
+  //  strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt"));
+
+    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt"));
+    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt"));
+
+    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt"));
+    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt"));
+
+
 
     HWND                hWnd;
     MSG                 msg;
