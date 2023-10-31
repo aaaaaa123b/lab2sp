@@ -12,12 +12,14 @@
 #define UNICODE
 #endif 
 
-#define COLS 4
+#define COLS 2
 #define ROWS 3
 
 using namespace std;
 
 vector<wstring> strings;
+
+HFONT hFont;
 
 VOID OnPaint(HWND hWnd, LONG clientWidth, LONG clientHeight)
 {
@@ -30,41 +32,42 @@ VOID OnPaint(HWND hWnd, LONG clientWidth, LONG clientHeight)
 
     RECT cellRect = RECT();
     int maxRowHeight = 0;
-    int currRowHeight = 0;
-    int stringIndex = 0;
     int topRowY = 0;
-    for (int row = 0; row < ROWS; row++)
-    {
+    int stringIndex = 0;
+
+    for (int row = 0; row < ROWS; row++) {
         maxRowHeight = 10;
         int leftColumnX = 0;
         int rightColumnX = colWidth;
-        for (int col = 0; col < COLS; col++)
-        {
+
+        for (int col = 0; col < COLS; col++) {
             cellRect.left = leftColumnX + padding;
             cellRect.right = rightColumnX - padding;
             cellRect.top = topRowY + padding;
             cellRect.bottom = topRowY + 1000;
 
-            if (stringIndex < strings.size())
-            {
-                currRowHeight = DrawText(hdc, strings.at(stringIndex++).c_str(), -1, &cellRect, DT_WORDBREAK | DT_TOP);
-            }
+            if (stringIndex < strings.size()) {
+                wstring text = strings.at(stringIndex);
+                text.erase(remove_if(text.begin(), text.end(), iswspace), text.end()); // Удаляем пробелы
+                int currRowHeight = DrawTextEx(hdc, const_cast<wchar_t*>(text.c_str()), -1, &cellRect, DT_WORDBREAK | DT_TOP | DT_EDITCONTROL, NULL);
 
-            if (currRowHeight > maxRowHeight)
-            {
-                maxRowHeight = currRowHeight;
+
+
+                if (currRowHeight > maxRowHeight) {
+                    maxRowHeight = currRowHeight;
+                }
+
+                stringIndex++;
             }
 
             leftColumnX += colWidth;
             rightColumnX += colWidth;
         }
 
-        if (row == 0)
-        {
+        if (row == 0) {
             rowHeights[row] = maxRowHeight + padding + padding;
         }
-        else
-        {
+        else {
             rowHeights[row] = rowHeights[row - 1] + maxRowHeight + padding + padding;
         }
         topRowY += maxRowHeight + padding + padding;
@@ -88,25 +91,19 @@ VOID OnPaint(HWND hWnd, LONG clientWidth, LONG clientHeight)
     EndPaint(hWnd, &ps);
 }
 
-
-void LoadTextFromFile(const wstring& filename) {
-    wifstream inputFile(filename);
-    wstring line;
-    wstring text;
-
-    if (inputFile.is_open()) {
-        while (getline(inputFile, line)) {
-            
-            line.erase(remove_if(line.begin(), line.end(), ::iswspace), line.end());
-            text += line + L" ";
+std::wstring LoadTextFromFile(const std::wstring& filename) {
+    std::wifstream file(filename);
+    std::wstring text;
+    if (file.is_open()) {
+        std::wstring line;
+        while (std::getline(file, line)) {
+            // Удаляем пробелы из строки
+            line.erase(std::remove_if(line.begin(), line.end(), iswspace), line.end());
+            text += line;
         }
-        inputFile.close();
-        strings.push_back(text);
+        file.close();
     }
-    else {
-        // Обработка ошибки открытия файла
-        wcerr << L"Ошибка открытия файла: " << filename << endl;
-    }
+    return text;
 }
 
 
@@ -114,6 +111,8 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
 {
+    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt"));
+    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt"));
 
     HWND                hWnd;
     MSG                 msg;
@@ -168,8 +167,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message,
     {
     case WM_CREATE:
     {
-        LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt");
-        LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt");
+        
         return 0;
     }
     case WM_PAINT:
