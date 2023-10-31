@@ -13,7 +13,7 @@
 #endif 
 
 #define COLS 3
-#define ROWS 4
+#define ROWS 1
 
 using namespace std;
 
@@ -77,14 +77,12 @@ VOID OnPaint(HWND hWnd, LONG clientWidth, LONG clientHeight)
     LineTo(hdc, clientWidth, 0);
 
 
-    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
-
-    for (int col = 1; col < COLS; col++)
+    for (int col = 0; col < COLS; col++)
     {
         MoveToEx(hdc, col * colWidth, 0, NULL);
-        LineTo(hdc, col * colWidth, screenHeight);
+        LineTo(hdc, col * colWidth, rowHeights[ROWS-1]);
+     
     }
-
 
     for (int row = 0; row < ROWS; row++)
     {
@@ -95,43 +93,38 @@ VOID OnPaint(HWND hWnd, LONG clientWidth, LONG clientHeight)
     EndPaint(hWnd, &ps);
 }
 
-std::wstring LoadTextFromFile(const std::wstring& filename) {
+std::vector<std::wstring> LoadTextFromFile(const std::wstring& filename) {
     std::wifstream file(filename);
-    std::wstring text;
+    std::vector<std::wstring> lines;
+
     if (file.is_open()) {
         std::wstring line;
         while (std::getline(file, line)) {
-            
             line.erase(std::remove_if(line.begin(), line.end(), iswspace), line.end());
-            text += line;
+            if (!line.empty()) {
+                lines.push_back(line);
+            }
         }
         file.close();
     }
-    return text;
+
+    return lines;
 }
+
 
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
 {
+    std::vector<std::wstring> lines = LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt");
 
-    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt"));
-    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt"));
-
-    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt"));
-    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt"));
-
-    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt"));
-  //  strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt"));
-
-    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt"));
-    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt"));
-
-    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file1.txt"));
-    strings.emplace_back(LoadTextFromFile(L"D:\\сп\\lab2\\file2.txt"));
-
-
+  
+    for (const std::wstring& line : lines) {
+        strings.emplace_back(line);
+    }
+   
+  
 
     HWND                hWnd;
     MSG                 msg;
@@ -151,17 +144,17 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, PSTR, INT iCmdShow)
     RegisterClass(&wndClass);
 
     hWnd = CreateWindow(
-        TEXT("GettingStarted"),   // window class name
-        TEXT("Lab2"),             // window caption
-        WS_OVERLAPPEDWINDOW,      // window style
-        CW_USEDEFAULT,            // initial x position
-        CW_USEDEFAULT,            // initial y position
-        CW_USEDEFAULT,            // initial x size
-        CW_USEDEFAULT,            // initial y size
-        NULL,                     // parent window handle
-        NULL,                     // window menu handle
-        hInstance,                // program instance handle
-        NULL);                    // creation parameters
+        TEXT("GettingStarted"),   
+        TEXT("Lab2"),             
+        WS_OVERLAPPEDWINDOW,      
+        CW_USEDEFAULT,            
+        CW_USEDEFAULT,            
+        CW_USEDEFAULT,          
+        CW_USEDEFAULT,            
+        NULL,                     
+        NULL,                     
+        hInstance,              
+        NULL);                 
 
     ShowWindow(hWnd, iCmdShow);
     UpdateWindow(hWnd);

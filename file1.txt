@@ -1,6 +1,16 @@
+It goes without saying, books are our teachers and friends. They teach us to be kind, clever, polite, hardworking, friendly. Books help us to learn more about nature, the world around us and many other interesting things.
 
-You forgot to allocate a buffer space before reading your data : LPVOID data = NULL;
+There are a lot of books on history, about animals, travellers, children, school and so on. Children like to read adventure and magic books, science fiction and detective stories. They enjoy stories, short stories, novels, fairy-tales, fables and poems.
 
-Before reading you must allocate a fileSize buffer space : data = malloc(fileSize);
+We must keep books clean and tidy. We must not spoil them.
 
-And probably must also declare your data variable as char* instead of void
+I am fond of reading, too. I like to read fairytales. My favourite book is «Mary Poppins». The author of the book is Pamela Travers. She is a famous English writer. The book tells us about wonderful adventures of children with their magic nurse Mary Poppins. She is my favourite character. She is kind and strict at the same time, joyful and tactful, well-bred and very pretty. Mary Poppins is popular with children.
+
+
+In Great Britain school begins at the age of five. At the age of sixteen the children usually leave school. So they spend eleven years there.
+
+There are primary and secondary schools in England. When children are five, they go to primary schools. First they attend infant schools or infant classes. They spend two years there till they are seven.
+
+Their classes are usually informal: they learn to read, count and write through different games. They sing songs, dance, look at pictures in interesting books, draw, learn to get on with their classmates. So their lessons are easy, not difficult.
+
+At the age of seven they go to junior schools and stay there till they are eleven. Real school begins. The lessons are more formal. There are different subjects on the timetable. Children study English, Maths, History, Nature Study, Geography, Art, Music, Physical Education (PE), Handicraft and Religion.

@@ -1,3 +1,5 @@
 Person(String name, int age, double weight, Gender gender, List<Phone> phones)
+
 Phone(Operator operator, String number)
+
 Enums -> Gender, Operator
